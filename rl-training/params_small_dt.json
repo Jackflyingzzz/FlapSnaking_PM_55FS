@@ -1,0 +1,75 @@
+{
+	"solver_params": {
+		"domain_x": 20,
+		"domain_y": 10,
+		"re": 100,
+		"dt": 4E-4,
+		"iters": 1700,
+		"iord": 6,
+		"first_snapshot": 1000000,
+		"snapshot_iter": 30,
+		"geom": {
+			"flap_length": 0.5,
+			"flap_thickness": 0.05,
+			"body_type": 1,
+			"body_ar": 1.0,
+			"x_centre": 4.0,
+			"y_centre": 5.0
+			}
+	},
+
+	"env_params": {
+	  
+		"probe_layout": {
+			"type": "uniform_flap_wake",
+			"n_probes": 200
+		},
+		"max_iter": 102000,
+		"reward_f": {
+			"type": "drag_abs_avg_lift",
+			"avg_window": 8500,
+			"gamma": 0.25,
+			"filter": true,
+			"filter_window": 1697
+		},
+		"dump_debug": 1700,
+		"behaviour_type": "snaking",
+		"include_angles_in_state": true,
+		"default_action": [0, 0],
+		"baseline_drag": 1.5687268651832271,
+		"abs_limits": {
+			"top": [-70, 90],
+			"bottom": [-70, 90]
+		},
+		"delta_limits": [-14.0, 14.0],
+		"out_of_bounds_penalty": -15
+	},
+
+	"rl_params": {
+		"agent": "ppo",
+		"num_episodes": 288,
+		"sync_episodes": true,
+		"subsampling_fraction": 0.2,
+		"optimisation_steps": 25,
+		"likelihood_ratio_clipping": 0.2,
+		"entropy": 0.01,
+		"actor": {
+			"lr": 5E-4,
+			"network": [
+				{"type": "dense", "size": 512},
+				{"type": "dense", "size": 512}
+			]
+		},
+		"critic": {
+			"lr": 8E-4,
+			"network": [
+				{"type": "dense", "size": 512},
+				{"type": "dense", "size": 512}
+			],
+			"optimiser": {
+				"type": "multi_step",
+				"num_steps": 12
+			}
+		}
+	}
+  }
