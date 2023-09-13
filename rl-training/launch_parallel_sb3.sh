@@ -1,12 +1,12 @@
 #!/bin/bash
-#PBS -l walltime=72:00:00
-#PBS -l select=1:ncpus=72:mem=100gb:ngpus=1:gpu_type=RTX6000
+#PBS -l walltime=00:20:00
+#PBS -l select=1:ncpus=2:mem=10gb
 #PBS -j oe
 
 
 
 # Cluster Environment Setup
-ncpus=72
+ncpus=2
 hostname -i
 
 cd $PBS_O_WORKDIR
