@@ -213,6 +213,17 @@ class IBMEnv(gym.Env):
         actions = open(os.path.join(self.cwd, 'alpha_transitions.prm'), 'w')
         actions.write(f'{self.prev_angles[0]}\n{self.prev_angles[0]}\n{self.prev_angles[1]}\n{self.prev_angles[1]}')
         actions.close()
+        
+        name2 = "RewardsPlot.csv"
+        if(not os.path.exists("../episode_averages/"+name2)):
+                with open("../episode_averages/"+name2, "w") as csv_file:
+                    spam_writer=csv.writer(csv_file, delimiter=";", lineterminator="\n")
+                    spam_writer.writerow(["Episode", "Rewards" ])
+                    spam_writer.writerow([self.episode, self.total_reward])
+        else:
+            with open("../episode_averages/"+name2, "a") as csv_file:
+                spam_writer=csv.writer(csv_file, delimiter=";", lineterminator="\n")
+                spam_writer.writerow([self.episode, self.total_reward])
 
         if self.plt is not None:
             self.reset_plot()
