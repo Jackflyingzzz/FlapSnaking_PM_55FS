@@ -86,6 +86,7 @@ class IBMEnv(gym.Env):
         self.prev_angles = np.array(env_params['default_action'], dtype=np.float)
         self.probe_layout = probe_layout
         self.solver_params = solver_params
+        self.total_reward = 0
 
         # For render
         self.plt = None
@@ -181,6 +182,7 @@ class IBMEnv(gym.Env):
     def reset(self):
         self.prev_angles = np.array(self.env_params['default_action'], dtype=np.float)
         self.cur_iter = 0
+        
         self.episode += 1
         self.history_buffer = {'drag': RingBuffer(self.hbuffer_length), 'lift': RingBuffer(self.hbuffer_length),
                                 'top_angle': RingBuffer(self.hbuffer_length), 'bottom_angle': RingBuffer(self.hbuffer_length)}
@@ -216,6 +218,7 @@ class IBMEnv(gym.Env):
             self.reset_plot()
 
         state = self.get_next_state(np.zeros(2))
+        self.total_reward = 0
         return state
 
     def reset_plot(self):
@@ -314,7 +317,7 @@ class IBMEnv(gym.Env):
         actions = copy.deepcopy(actions_ref)
 
         alpha_transitions = open(os.path.join(self.cwd, 'alpha_transitions.prm'), 'w')
-
+        
         if self.flap_behaviour == 'snaking':
             actions = np.append(actions, actions[0]) # When snaking, both flaps have the same angle
         elif self.flap_behaviour == 'clapping':
@@ -371,6 +374,7 @@ class IBMEnv(gym.Env):
             reward = force_rw
         else:
             assert 'The rl output in code launch_parallel_sb3.py is not in correct format'
+        self.total_reward = self.total_reward + reward
             
         return next_state, reward, terminal, {}
 
