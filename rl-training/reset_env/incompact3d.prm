@@ -1,0 +1,81 @@
+#
+# INCOMPACT 3D Flow parameters 
+#
+40.     # Lx  Domain Size X-dir
+20.     # Ly  Domain Size Y-dir 
+1.      # Lz  Domain Size Z-dir 
+100.0   # Reynolds number 
+1.      # Schmidt number
+1.0     # u1 (max velocity) 
+1.0     # u2 (min velocity) 
+0.00    # Turbulence intensity (1=100%)
+0.0008  # Time step
+#
+# INCOMPACT3D Flow configuration
+#
+2      # nclx BC-x
+0      # ncly BC-y
+0      # nclz BC-z
+1      # Type of flow (iecoule) 
+1      # Inflow condition (1: classic, 2: turbinit)
+1      # First iteration (idebut)  
+1  # Last iteration (ifin)
+2      # Temporal scheme (1:Euler, 2:AB2, 3:AB3, 4: AB4, 5: RK3, 6:RK4)
+1      # y mesh refinement (0:nonen, 1:center, 2:both sides, 3:bottom)
+8      # Refinement parameter (beta) 
+0      # impi (0: scalar, 1: parallel)
+1      # ifft (1: jmfft, 2: FFTW)
+1      # iskew (0:urotu, 1:skew)
+0      # ifiltre (0:pas de filtre, 1:filtre)
+0      # iscalaire (0: no scalar, 1:scalar)
+6      # iord (2: 2nd Order, 6: 6th Order) ! Spatial Discretisation
+#
+# INCOMPACT 3D File parameters 
+#
+data           # Relative data path
+0              # Read initial flow field ?
+restart        # Name of initial flow field
+2       # Index of first snapshot file
+30       # Iteration between snapshot
+test1          # Prefix of snapshot files
+serie_3D.dat   # Name of temporel inflow condition
+condent.dat    # Name of turbinit file
+#
+# INCOMPACT 3D Body forces (old school)
+#
+0    # Old Immersed Boundary Method? (0:no,1:yes)
+0    # Penalisation Method (0:no,1:yes)
+10.0   # X-centre position
+10.0  # Y-centre position
+1.   # Z-centre position
+0.5  # Radius  
+#
+# INCOMPACT 3D Forcing with Lagrangian Polynomials
+#
+1    # Cubic Spline Interpolation? (0:no,1:yes)
+2    # Number of points on each side of reconstruction (1 - 3)
+1    # Remove 1st point during reconstruction? (0:no,1:yes)
+0.0 # Immersed Boundary Prescribed x-Velocity (+/-)
+0.0  # Immersed Boundary Prescribed y-Velocity (+/-)
+#
+# INCOMPACT Compute Aerodynamic Coefficient
+#
+0       # iaero (1: compute)
+3.0     # min x limit of domain
+6.0     # min x limit of domain
+4.0     # min y limit of domain
+6.0     # min y limit of domain
+1.      # min z limit of domain
+1.      # min z limit of domain
+1.      # Front surface
+#
+# INCOMPACT Ahmed Body with Flaps
+#
+5.0    # Maximum flap angle (degrees) (amax)
+0.10    # Oscillating flap frequency (freq)
+0.6     # Length of flaps
+0.05     # Thickness of flaps
+1       # Flapping (0) -or- Clapping (1) 
+1.0     # Ahmed Body Aspect Ratio (length/width)
+1       # Exceed 0 degrees angle? (0: Yes, 1: No)  (Only for Clapping!)
+0       # Gemoetry: (Square: 0, Ahmed Body: 1) 
