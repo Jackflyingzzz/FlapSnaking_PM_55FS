@@ -1,5 +1,0 @@
-2a0c:5bc0:89:a0d:bace:f6ff:fef9:9466 10.149.20.102
-/var/spool/PBS/mom_priv/jobs/8231441.pbs.SC: line 20: cd: rl-training: No such file or directory
-/rds/general/user/cx220/home/FlapSnaking_PM_VecFrameStack_Gpu/rl-training/reset_env
-uniform_base
-=>> PBS: job killed: mem 27506732kb exceeded limit 10485760kb

@@ -1,5 +1,0 @@
-2a0c:5bc0:89:a0b:bace:f6ff:fe51:f6d0 10.149.18.9
-/var/spool/PBS/mom_priv/jobs/8223988.pbs.SC: line 20: cd: rl-training: No such file or directory
-/rds/general/user/cx220/home/FlapSnaking_PM_VecFrameStack_Gpu/rl-training/reset_env
-uniform_base
-=>> PBS: job killed: walltime 259312 exceeded limit 259200
