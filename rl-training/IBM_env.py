@@ -421,9 +421,14 @@ class IBMEnv(gym.Env):
         # TODO: Convert to binary file
         #force_f = open(os.path.join(self.cwd, 'aerof6.dat'), 'r')
         file_path = os.path.join(self.cwd, 'aerof6.dat')
+        file_path_top = os.path.join(self.cwd, 'aerof7.dat')
+        file_path_bottom = os.path.join(self.cwd, 'aerof8.dat')
         
         drag_vals = []
         lift_vals = []
+        top_normal = []
+        bottom_normal = []
+        
     
         with open(file_path, 'r') as force_f:
             for line in force_f:
@@ -434,6 +439,17 @@ class IBMEnv(gym.Env):
                     except (IndexError, ValueError):  # catches lines with not enough values or non-numeric values
                         # Handle or log the error here
                         pass
+
+        with open(file_path, 'r') as force_top:
+            for line in force_top:
+                    values = line.split()
+                    try:
+                        top_normal.append(float(values[0]))
+                        lift_vals.append(float(values[1]))
+                    except (IndexError, ValueError):  # catches lines with not enough values or non-numeric values
+                        # Handle or log the error here
+                        pass
+        
 
         file_path_angle = os.path.join(self.cwd, 'alpha_transitions.prm')
         with open(file_path_angle, 'r') as angle_a:
