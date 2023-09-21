@@ -455,14 +455,11 @@ class IBMEnv(gym.Env):
             for line in force_bottom:
                     values = line.split()
                     try:
-                        top_drag_vals.append(float(values[0]))
-                        top_lift_vals.append(float(values[1]))
+                        bottom_drag_vals.append(float(values[0]))
+                        bottom_lift_vals.append(float(values[1]))
                     except (IndexError, ValueError):  # catches lines with not enough values or non-numeric values
                         # Handle or log the error here
-                        pass
-
-        
-        
+                        pass      
 
         file_path_angle = os.path.join(self.cwd, 'alpha_transitions.prm')
         with open(file_path_angle, 'r') as angle_a:
