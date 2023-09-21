@@ -426,8 +426,10 @@ class IBMEnv(gym.Env):
         
         drag_vals = []
         lift_vals = []
-        top_normal = []
-        bottom_normal = []
+        top_drag_vals = []
+        top_lift_vals = []
+        bottom_drag_vals = []
+        bottom_lift_vals = []
         
     
         with open(file_path, 'r') as force_f:
@@ -440,15 +442,26 @@ class IBMEnv(gym.Env):
                         # Handle or log the error here
                         pass
 
-        with open(file_path, 'r') as force_top:
+        with open(file_path_top, 'r') as force_top:
             for line in force_top:
                     values = line.split()
                     try:
-                        top_normal.append(float(values[0]))
-                        lift_vals.append(float(values[1]))
+                        top_drag_vals.append(float(values[0]))
+                        top_lift_vals.append(float(values[1]))
                     except (IndexError, ValueError):  # catches lines with not enough values or non-numeric values
                         # Handle or log the error here
                         pass
+        with open(file_path_bottom, 'r') as force_bottom:
+            for line in force_bottom:
+                    values = line.split()
+                    try:
+                        top_drag_vals.append(float(values[0]))
+                        top_lift_vals.append(float(values[1]))
+                    except (IndexError, ValueError):  # catches lines with not enough values or non-numeric values
+                        # Handle or log the error here
+                        pass
+
+        
         
 
         file_path_angle = os.path.join(self.cwd, 'alpha_transitions.prm')
