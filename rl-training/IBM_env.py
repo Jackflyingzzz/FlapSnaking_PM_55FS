@@ -388,12 +388,12 @@ class IBMEnv(gym.Env):
         reward_f = self.env_params['reward_f']['type']
         terminal = False #self.cur_iter >= self.max_iter !! We should not be setting terminal to true when reaching max timestep
         if self.rl_output == 'angle_change':
-            if reward_f == 'power_reward':
+            if reward_f == 'power':
                 reward = reward_output
             else:
                 reward = reward_output + penalty
         elif self.rl_output == 'angle':
-            if reward_f == 'power_reward':
+            if reward_f == 'power':
                 reward = reward_output
             else:
                 reward = reward_output + penalty
@@ -584,7 +584,7 @@ class IBMEnv(gym.Env):
              reward = -np.mean(drag_window) + self.mean_drag_no_control - gamma * np.absolute(np.mean(lift_window)) - angle_weight * (np.sum(np.absolute(self.prev_angles)))
         elif reward_f == 'drag_lift_angle_change':
              reward = -np.mean(drag_window) + self.mean_drag_no_control - gamma * np.absolute(np.mean(lift_window)) + angle_change_weight * np.sum(np.absolute(actions))
-        elif reward_f == 'power_reward':
+        elif reward_f == 'power':
              power_window = self.history_buffer['net_power'].get()[-min(self.cur_iter - 2 * round(self.cur_iter / self.solver_params.step_iter), avg_window):] 
              reward = np.mean(power_window)
              return reward
