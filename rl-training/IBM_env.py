@@ -480,6 +480,7 @@ class IBMEnv(gym.Env):
         top_flap_lift = np.array(top_lift_vals)
         bottom_flap_drag = np.array(bottom_drag_vals)
         bottom_flap_lift = np.array(bottom_lift_vals)
+        net_power = np.array([])
 
         output_name = f'debug_{self.env_number}'
         output_path = os.path.join(self.cwd, output_name)
@@ -490,8 +491,6 @@ class IBMEnv(gym.Env):
         counter = 0
         with open(output_path, mode) as csv_file:
             spam_writer = csv.writer(csv_file, delimiter=";", lineterminator="\n")
-
-            
             # If file didn't exist, write the header
             if not file_exists:
                 spam_writer.writerow(["Episode", "Steps", "Drag", "Lift", "Top Flap Angle", "Bottom Flap Angle", "Top Flap Power", "Bottom Flap Power",])
@@ -509,12 +508,11 @@ class IBMEnv(gym.Env):
                 topflap_power = abs(tl*math.cos(math.radians(topflap_current)) - td*math.sin(math.radians(topflap_current))) * topflap_omega * 0.3
                 bottomflap_power = abs(bl*math.cos(math.radians(bottomflap_current)) - bd*math.sin(math.radians(bottomflap_current))) * bottomflap_omega * 0.3
 
-                power_ratio = (1.404-d)/(topflap_power + bottomflap_power)
-
-                
+                power = (1.404-d) - (topflap_power + bottomflap_power)
+                net_power = net.power.append(power)
                 spam_writer.writerow([self.episode, steps, d, l, topflap_current, bottomflap_current, topflap_power, bottomflap_power, power])
 
-        return drag, lift
+        return drag, lift, net_power
 
 
     def get_next_state(self, actions_rad):
