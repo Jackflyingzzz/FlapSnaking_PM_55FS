@@ -133,7 +133,7 @@ class IBMEnv(gym.Env):
 
         self.history_buffer = {'drag': RingBuffer(self.hbuffer_length), 'lift': RingBuffer(self.hbuffer_length),
                                 'top_angle': RingBuffer(self.hbuffer_length), 'bottom_angle': RingBuffer(self.hbuffer_length),
-                                'net_power': RingBuffer(self.hbufferlength)}
+                                'net_power': RingBuffer(self.hbuffer_length)}
         self.reset_dir = reset_dir
         # Make a new directory for this env and copy over the necessary files
         env_dir = f'env_{self.env_number}'
