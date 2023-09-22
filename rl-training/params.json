@@ -26,7 +26,7 @@
 		},
 		"max_iter": 85000,
 		"reward_f": {
-			"type": "drag_abs_avg_lift",
+			"type": "power",
 			"avg_window": 600,
 			"gamma": 0.2,
 			"angle_weight": 5E-3,
