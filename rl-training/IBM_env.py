@@ -191,7 +191,8 @@ class IBMEnv(gym.Env):
         
         self.episode += 1
         self.history_buffer = {'drag': RingBuffer(self.hbuffer_length), 'lift': RingBuffer(self.hbuffer_length),
-                                'top_angle': RingBuffer(self.hbuffer_length), 'bottom_angle': RingBuffer(self.hbuffer_length)}
+                                'top_angle': RingBuffer(self.hbuffer_length), 'bottom_angle': RingBuffer(self.hbuffer_length),
+                                 'net_power': RingBuffer(self.hbuffer_length)}
         if self.logdir is not None:
             self.scalar_output_file.flush()
             if self.env_params['obs_normalisation']:
