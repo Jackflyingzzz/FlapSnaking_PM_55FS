@@ -132,7 +132,8 @@ class IBMEnv(gym.Env):
         self.out_of_bounds_penalty = env_params['out_of_bounds_penalty']
 
         self.history_buffer = {'drag': RingBuffer(self.hbuffer_length), 'lift': RingBuffer(self.hbuffer_length),
-                                'top_angle': RingBuffer(self.hbuffer_length), 'bottom_angle': RingBuffer(self.hbuffer_length)}
+                                'top_angle': RingBuffer(self.hbuffer_length), 'bottom_angle': RingBuffer(self.hbuffer_length),
+                                'net_power': RingBuffer(self.hbufferlength)}
         self.reset_dir = reset_dir
         # Make a new directory for this env and copy over the necessary files
         env_dir = f'env_{self.env_number}'
@@ -352,7 +353,7 @@ class IBMEnv(gym.Env):
             
         self.run_iters_with_dt() # Run the solver   
         
-        (drag, lift) = self.read_force_output() #read the drag and lift, and output it to an csv file
+        (drag, lift, net_power) = self.read_force_output() #read the drag and lift, and output it to an csv file
         
         self.cur_iter += self.solver_params.step_iter
         if self.rl_output == 'angle_change':
@@ -365,8 +366,9 @@ class IBMEnv(gym.Env):
        
         self.history_buffer['lift'].extend(lift)
         self.history_buffer['drag'].extend(drag)
+        self.history_buffer['net_power'].extend(net_power)
 
-        force_rw = self.get_reward(actions)
+        reward_output = self.get_reward(actions)
         if self.logdir is not None:
             # TODO: Implement data dumps only every N steps
             if not self.dump_debug == 0 and self.cur_iter % self.dump_debug == 0:
@@ -376,20 +378,28 @@ class IBMEnv(gym.Env):
                 self.history_buffer['drag'].get()[-1], # drag
                 self.prev_angles[0], # top_angle
                 self.prev_angles[1], # bottom_angle
-                force_rw] #reward
+                reward_output] #reward
                 self.scalar_writer.writerow(row)
 
         self.history_buffer['top_angle'].extend(self.prev_angles[0])
         self.history_buffer['bottom_angle'].extend(self.prev_angles[1])
 
         next_state = self.get_next_state(actions)
+        reward_f = self.env_params['reward_f']['type']
         terminal = False #self.cur_iter >= self.max_iter !! We should not be setting terminal to true when reaching max timestep
         if self.rl_output == 'angle_change':
-            reward = force_rw + penalty
+            if reward_f == 'power_reward':
+                reward = reward_output
+            else:
+                reward = reward_output + penalty
         elif self.rl_output == 'angle':
-            reward = force_rw
+            if reward_f == 'power_reward':
+                reward = reward_output
+            else:
+                reward = reward_output + penalty
         else:
             assert 'The rl output in code launch_parallel_sb3.py is not in correct format'
+            
         self.total_reward = self.total_reward + reward
             
         return next_state, reward, terminal, {}
@@ -574,6 +584,10 @@ class IBMEnv(gym.Env):
              reward = -np.mean(drag_window) + self.mean_drag_no_control - gamma * np.absolute(np.mean(lift_window)) - angle_weight * (np.sum(np.absolute(self.prev_angles)))
         elif reward_f == 'drag_lift_angle_change':
              reward = -np.mean(drag_window) + self.mean_drag_no_control - gamma * np.absolute(np.mean(lift_window)) + angle_change_weight * np.sum(np.absolute(actions))
+        elif reward_f == 'power_reward':
+             power_window = self.history_buffer['net_power'].get()[-min(self.cur_iter - 2 * round(self.cur_iter / self.solver_params.step_iter), avg_window):] 
+             reward = np.mean(power_window)
+             return reward
 
         return reward / 4
 
