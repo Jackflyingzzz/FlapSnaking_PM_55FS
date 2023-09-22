@@ -516,8 +516,8 @@ class IBMEnv(gym.Env):
                 topflap_omega = (math.radians(top_flap_future_angle) - math.radians(top_flap_prev_angle))/0.68
                 bottomflap_omega = (math.radians(bottom_flap_future_angle) - math.radians(bottom_flap_prev_angle))/0.68
                 
-                topflap_power = abs(tl*math.cos(math.radians(topflap_current)) - td*math.sin(math.radians(topflap_current))) * topflap_omega * 0.3
-                bottomflap_power = abs(bl*math.cos(math.radians(bottomflap_current)) - bd*math.sin(math.radians(bottomflap_current))) * bottomflap_omega * 0.3
+                topflap_power = abs(tl*math.cos(math.radians(topflap_current)) - td*math.sin(math.radians(topflap_current))) * abs(topflap_omega) * 0.3
+                bottomflap_power = abs(bl*math.cos(math.radians(bottomflap_current)) - bd*math.sin(math.radians(bottomflap_current))) * abs(bottomflap_omega) * 0.3
 
                 power = (self.mean_drag_no_control - d) - (topflap_power + bottomflap_power)
                 net_power.append(power)
