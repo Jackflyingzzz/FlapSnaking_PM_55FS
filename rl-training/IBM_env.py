@@ -476,6 +476,10 @@ class IBMEnv(gym.Env):
                 
         drag = np.array(drag_vals)
         lift = np.array(lift_vals)
+        top_flap_drag = np.array(top_drag_vals)
+        top_flap_lift = np.array(top_lift_vals)
+        bottom_flap_drag = np.array(bottom_drag_vals)
+        bottom_flap_lift = np.array(bottom_lift_vals)
 
         output_name = f'debug_{self.env_number}'
         output_path = os.path.join(self.cwd, output_name)
@@ -490,18 +494,25 @@ class IBMEnv(gym.Env):
             
             # If file didn't exist, write the header
             if not file_exists:
-                spam_writer.writerow(["Episode", "Steps", "Drag", "Lift", "Top Flap Angle", "Bottom Flap Angle"])
+                spam_writer.writerow(["Episode", "Steps", "Drag", "Lift", "Top Flap Angle", "Bottom Flap Angle", "Top Flap Power", "Bottom Flap Power",])
 
-            for d, l in zip(drag, lift):
+            for d, l, td, tl, bd, bl in zip(drag, lift, top_flap_drag, top_flap_lift, bottom_flap_drag, bottom_flap_lift):
                 steps += 1
                 counter +=1
                 
                 #linear interpolation between previous and futrue angle, consistent with incompact3d setting which assume uniform angular velocity
                 topflap_current = (counter/self.solver_params.step_iter)*(top_flap_future_angle-top_flap_prev_angle) + top_flap_prev_angle 
                 bottomflap_current = (counter/self.solver_params.step_iter)*(bottom_flap_future_angle-bottom_flap_prev_angle) + bottom_flap_prev_angle
+                topflap_omega = (math.radians(top_flap_future_angle) - math.radians(top_flap_prev_angle))/0.68
+                bottomflap_omega = (math.radians(bottom_flap_future_angle) - math.radians(bottom_flap_prev_angle))/0.68
+                
+                topflap_power = abs(tl*math.cos(math.radians(topflap_current)) - td*math.sin(math.radians(topflap_current))) * topflap_omega * 0.3
+                bottomflap_power = abs(bl*math.cos(math.radians(bottomflap_current)) - bd*math.sin(math.radians(bottomflap_current))) * bottomflap_omega * 0.3
+
+                power_ratio = (1.404-d)/(topflap_power + bottomflap_power)
 
                 
-                spam_writer.writerow([self.episode, steps, d, l, topflap_current, bottomflap_current])
+                spam_writer.writerow([self.episode, steps, d, l, topflap_current, bottomflap_current, topflap_power, bottomflap_power, power])
 
         return drag, lift
 
