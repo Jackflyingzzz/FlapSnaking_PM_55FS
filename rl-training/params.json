@@ -41,7 +41,7 @@
 		"obs_normalisation": false,
 		"include_angle_change_in_state": true,
 		"default_action": [0, 0],
-		"baseline_drag": 1.4057633217161294,
+		"baseline_drag": 1.4040033217161294,
 		"baseline_drag_old": 1.5265302659355933,
 		"abs_limits": {
 			"top": [-50, 70],
