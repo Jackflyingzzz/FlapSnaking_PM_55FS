@@ -121,7 +121,7 @@ if __name__ == '__main__':
 
     env = SubprocVecEnv([create_env(env_config, nb_actuations, i) for i in range(number_servers)],
             start_method='spawn')
-    env = VecFrameStack(env, n_stack=55)
+    env = VecFrameStack(env, n_stack=14)
     env = VecNormalize(env, gamma=0.99)
 
     if mode=='train':
