@@ -164,7 +164,7 @@ class IBMEnv(gym.Env):
         if self.env_params['include_angle_change_in_state']:
             state_shape = state_shape + 2 # Shape is number of probes + top and bottom angle change
 
-        self.observation_space = gym.spaces.Box(shape=(state_shape,), low=-np.inf, high=np.inf) # Shape is number of probes
+        self.observation_space = gym.spaces.Box(shape=(33,), low=-np.inf, high=np.inf) # Shape is number of probes
         
         if self.rl_output == 'angle_change':
             self.action_space = gym.spaces.Box(shape=(self.action_shape,), low=float(self.env_params['delta_limits'][0])*np.pi/180, high=float(self.env_params['delta_limits'][1])*np.pi/180)
